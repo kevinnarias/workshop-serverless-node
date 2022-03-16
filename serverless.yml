@@ -1,0 +1,17 @@
+org: kevinarias
+app: workshop-serverless-node
+service: workshop-serverless-node
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+functions:
+  hello:
+    handler: app/handler/entrypoint.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
