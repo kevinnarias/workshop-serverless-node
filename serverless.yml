@@ -1,12 +1,31 @@
-org: kevinarias
+org: kevinnarias
 app: workshop-serverless-node
 service: workshop-serverless-node
 
 frameworkVersion: '3'
 
+custom:
+  stage: ${opt:stage, self:provider.stage, 'dev'}
+  tableName: ${self:custom.stage}-numbers
+
 provider:
   name: aws
   runtime: nodejs12.x
+  region: us-east-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.tableName}"
+  environment:
+    TABLE_NAME: ${self:custom.tableName}
 
 functions:
   hello:
@@ -15,3 +34,13 @@ functions:
       - httpApi:
           path: /
           method: get
+  plus:
+    handler: app/handler/operations.plus
+    events:
+      - httpApi:
+          path: /plus
+          method: post
+
+resources: 
+  - ${file(resources/dynamodb-table.yml)}
+  - ${file(resources/s3-bucket.yml)}
