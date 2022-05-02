@@ -43,4 +43,3 @@ functions:
 
 resources: 
   - ${file(resources/dynamodb-table.yml)}
-  - ${file(resources/s3-bucket.yml)}
