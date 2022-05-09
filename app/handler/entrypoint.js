@@ -2,5 +2,5 @@
 const { generateResponse } = require ('../utils/utils')
 
 module.exports.hello = async (event) => {
-  return generateResponse("Hola Tres Pepitos")
+  return generateResponse("Hola Cuatro Pepitos")
 };
